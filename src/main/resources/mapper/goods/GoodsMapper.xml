@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.worksout.mapper.goods.GoodsMapper">
+
+    <!-- ADMIN QUERY -->
+
+    <select id="selectGoodsList" resultType="goods">
+        SELECT /* getGoodsList */
+               DISTINCT
+               (SELECT DISTINCT MAIN_IMG FROM GOODS_INFO WHERE GOODS_NO = info.GOODS_NO AND COLOR = info.REP_COLOR) AS MAIN_IMG
+               , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
+               , GOODS_NO
+               , GOODS_NM
+               , REP_COLOR
+               , SEASON
+               , SUPPLY_PRICE
+               , RETAIL_PRICE
+          FROM
+               GOODS_INFO info
+          <include refid="goodsFilter" />
+    </select>
+    <sql id="goodsFilter">
+        <if test="_parameter == null">ORDER BY REG_DT DESC LIMIT 0, 10</if>
+        <where>
+            <if test="seasonNm != null and seasonNm != ''">AND SEASON = #{seasonNm}</if>
+            <if test="categoryNo != null and categoryNo != 0">AND CATEGORY_NO = #{categoryNo}</if>
+            <if test="searchGb != null and searchGb != '' and searchTxt != null and searchTxt != ''">
+                AND UPPER(${searchGb}) like CONCAT(CONCAT('%',UPPER(#{searchTxt})),'%')
+            </if>
+            <if test="minPrice != null and minPrice != 0">AND RETAIL_PRICE <![CDATA[>]]> #{minPrice}</if>
+            <if test="maxPrice != null and maxPrice != 0">AND RETAIL_PRICE <![CDATA[<]]> #{maxPrice}</if>
+            <if test="sizeGroupNo != null and sizeGroupNo != 0">AND SIZE_GROUP_NO = #{sizeGroupNo}</if>
+            <if test="displayYn != null">AND DISPLAY_YN = #{displayYn}</if>
+        </where>
+    </sql>
+
+    <resultMap id="selectGoods" type="goods">
+        <id column="GOODS_NO" property="goodsNo" />
+        <result column="GOODS_NM" property="goodsNm" />
+        <result column="GOODS_DESC" property="goodsDesc" />
+        <result column="CATEGORY_NO" property="categoryNo" />
+        <result column="CATEGORY_Nm" property="categoryNm" />
+        <result column="SEASON" property="season" />
+        <result column="REP_COLOR" property="repColor" />
+        <result column="SIZE_GROUP_NO" property="sizeGroupNo" />
+        <result column="SIZE_GROUP_NM" property="sizeGroupNm" />
+        <result column="SUPPLY_PRICE" property="supplyPrice" />
+        <result column="RETAIL_PRICE" property="retailPrice" />
+        <result column="DISPLAY_YN" property="displayYn" />
+        <collection property="colors" ofType="String">
+            <result column="COLOR" property="colors" />
+        </collection>
+        <collection property="mainImgs" ofType="String">
+            <result column="MAIN_IMG" property="mainImgs" />
+        </collection>
+        <collection property="imgs" ofType="GoodsImg" column="GOODS_NO" select="selectGoodsImg"/>
+    </resultMap>
+    <select id="getGoods" resultMap="selectGoods">
+        SELECT /* getGoods */
+               DISTINCT
+               CATEGORY_NO
+               , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
+               , SEASON
+               , GOODS_NO
+               , GOODS_NM
+               , GOODS_DESC
+               , COLOR
+               , REP_COLOR
+               , SIZE_GROUP_NO
+               , (SELECT DISTINCT GROUP_NM FROM GOODS_SIZE_GROUP WHERE GROUP_NO = info.SIZE_GROUP_NO) AS SIZE_GROUP_NM
+               , SUPPLY_PRICE
+               , RETAIL_PRICE
+               , DISPLAY_YN
+               , MAIN_IMG
+               , COLOR_ORD
+          FROM
+               GOODS_INFO info
+         WHERE
+               GOODS_NO = #{goodsNo}
+      ORDER BY COLOR_ORD ASC
+    </select>
+    <select id="selectGoodsImg" resultType="GoodsImg">
+        SELECT /* selectGoodsImg */
+               GOODS_NO
+               , FILENAME
+               , ORD
+          FROM
+               GOODS_IMG
+         WHERE
+               GOODS_NO = #{goodsNo}
+      ORDER BY ORD ASC
+    </select>
+
+    <update id="updateGoods">
+        UPDATE GOODS_INFO /* updateGoods */
+           SET
+               CATEGORY_NO = #{categoryNo}
+               , SEASON = #{season}
+               , GOODS_NM = #{goodsNm}
+               , REP_COLOR = #{repColor}
+               , GOODS_DESC = #{goodsDesc}
+               , SUPPLY_PRICE = #{supplyPrice}
+               , RETAIL_PRICE = #{retailPrice}
+               , DISPLAY_YN = #{displayYn}
+               , UPDR = #{updr}
+               , UPD_DT = NOW()
+         WHERE
+               GOODS_NO = #{goodsNo}
+    </update>
+
+    <update id="updateGoodsImgOrd">
+        UPDATE /* updateGoodsImgOrd */
+               GOODS_IMG
+           SET
+               ORD =
+               (CASE FILENAME
+                    <foreach collection="imgs" item="img">
+                        WHEN #{img.filename} THEN #{img.ord}
+                    </foreach>
+                ELSE ORD
+                END
+               )
+         WHERE
+               FILENAME IN
+               <foreach collection="imgs" item="img" open="(" close=")" separator=",">
+               #{img.filename}
+               </foreach>
+    </update>
+
+    <!-- SHOP QUERY -->
+    <resultMap id="goodsListShop" type="Goods">
+        <id column="GOODS_NO" property="goodsNo" />
+        <result column="GOODS_NM" property="goodsNm" />
+        <result column="CATEGORY_NO" property="categoryNo" />
+        <result column="SEASON" property="season" />
+        <result column="REP_COLOR" property="repColor" />
+        <result column="RETAIL_PRICE" property="retailPrice" />
+        <result column="REP_IMG" property="repImg" />
+        <collection property="colors" ofType="String">
+            <result column="COLOR" property="colors" />
+        </collection>
+        <collection property="mainImgs" ofType="String">
+            <result column="MAIN_IMG" property="mainImgs" />
+        </collection>
+    </resultMap>
+    <select id="getGoodsListShop" resultMap="goodsListShop">
+        SELECT DISTINCT /* getGoodsListShop */
+	           CATEGORY_NO
+	           , SEASON
+	           , GOODS_NO
+	           , GOODS_NM
+	           , REP_COLOR
+	           , COLOR
+	           , RETAIL_PRICE
+	           , COLOR_ORD
+	           , CATEGORY_ORD
+	           , MAIN_ORD
+	           , DISPLAY_YN
+	           , MAIN_IMG
+	           , (SELECT DISTINCT MAIN_IMG FROM GOODS_INFO WHERE GOODS_NO = info.GOODS_NO AND COLOR = info.REP_COLOR) AS REP_IMG
+	           , STOCK
+          FROM GOODS_INFO info
+         WHERE DISPLAY_YN = true
+      ORDER BY MAIN_ORD, COLOR_ORD
+    </select>
+
+</mapper>

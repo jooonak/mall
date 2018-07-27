@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shop.mapper.member.MemberMapper">
+
+    <resultMap id="findMember" type="Member">
+        <id column="USERNAME" property="username" />
+        <result column="NAME" property="name" />
+        <result column="PASSWORD" property="password" />
+        <result column="PHONE" property="phone" />
+        <result column="ADDRESS" property="address" />
+        <result column="DETAIL_ADDRESS" property="detailAddress" />
+        <result column="POINT" property="point" />
+        <result column="UPD_DT" property="updDate" />
+        <result column="REG_DT" property="regDate" />
+
+        <collection property="roles" ofType="Role" >
+            <id column="ROLE_ID" property="roleId" />
+            <result column="ROLE_NAME" property="roleName" />
+        </collection>
+    </resultMap>
+    <select id="findMember" resultMap="findMember">
+        SELECT
+               m.USERNAME
+               , m.NAME
+               , m.PASSWORD
+               , m.PHONE
+               , m.ADDRESS
+               , m.DETAIL_ADDRESS
+               , m.POINT
+               , m.UPD_DT
+               , m.REG_DT
+               , m.ROLE_ID
+               , ROLE_NAME
+          FROM
+               (SELECT
+                        mem.USERNAME
+                        , mem.NAME
+                        , mem.PASSWORD
+                        , mem.PHONE
+                        , mem.ADDRESS
+                        , mem.DETAIL_ADDRESS
+                        , mem.POINT
+                        , mem.UPD_DT
+                        , mem.REG_DT
+                        , ROLE_ID
+                   FROM MEM_INFO mem
+                   JOIN MEM_ROLE mr
+                     ON mem.USERNAME = mr.USERNAME) m
+          JOIN ROLE r
+            ON m.ROLE_ID = r.ROLE_ID
+         WHERE m.USERNAME = #{_parameter}
+    </select>
+    
+    <insert id="saveToken">
+        INSERT INTO MEM_PWD_TOKEN
+                    (TOKEN, USERNAME, EXPIRY_DATE)
+             VALUES (#{token}, #{member.username}, NOW() + INTERVAL 12 HOUR)
+    </insert>
+
+	<resultMap id="getToken" type="PasswordResetToken">
+		<!-- PASSWORD_RESET_TOKEN TABLE -->
+		<result column="TOKEN" property="token" />
+		<result column="EXPIRY_DT" property="expiryDate" />
+		<!-- /PASSWORD_RESET_TOKEN TABLE -->
+
+		<!-- MEMBER TABLE -->
+		<result column="USERNAME" property="member.username" />
+		<!-- /MEMBER TABLE -->
+	</resultMap>
+    <select id="getToken" resultMap="getToken">
+		SELECT
+			   TOKEN, EXPIRY_DT, mem.USERNAME, mem.NAME
+		  FROM
+               MEM_PWD_TOKEN token JOIN
+			   MEM_INFO mem
+		 	ON
+			   token.USERNAME = mem.USERNAME
+		 WHERE
+		 	   <if test="member != null">
+				   mem.USERNAME = #{member.username} AND
+			   </if>
+			   TOKEN = #{token}
+    </select>
+
+</mapper>

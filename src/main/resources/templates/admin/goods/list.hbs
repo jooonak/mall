@@ -1,0 +1,73 @@
+{{> admin/include/header}}
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title text-center"><a href="list"> Goods List </a></h4>
+                            <h6><a href="register"><button class="btn btn-primary float-right"> 상품등록 </button></a></h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-primary text-center">
+                                        <th>이미지</th>
+                                        <th>카테고리</th>
+                                        <th>상품명</th>
+                                        <th>대표색상</th>
+                                        <th>시즌</th>
+                                        <th>공급가</th>
+                                        <th>판매가</th>
+                                    </thead>
+                                    <tbody>
+                                    {{#goodsList}}
+                                        <tr class="text-center">
+                                            <td width="15%"><img width="70px" src="http://img.worksout.co.kr/shop/img{{mainImg}}" onerror="this.src='/img/no-image.png'"></td>
+                                            <td width="10%">{{categoryNm}}</td>
+                                            <td width="20%"><a href="/admin/goodsDetail?goodsNo={{goodsNo}}">{{goodsNm}}</a></td>
+                                            <td width="15%">{{repColor}}</td>
+                                            <td width="15%">{{season}}</td>
+                                            <td width="15%">{{supplyPrice}}</td>
+                                            <td width="15%">{{retailPrice}}</td>
+                                        </tr>
+                                    {{/goodsList}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="w-100 card card-nav-tabs text-center" style="width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title"> Goods Display </h4>
+                            <h6 class="card-subtitle mb-2 text-muted"> 상품 진열 순서를 수정할 수 있습니다. </h6>
+                            <p class="card-text"> </p>
+                            <a href="display?type=main" class="card-link"> 메인페이지 관리 </a>
+                            <a href="display?type=category" class="card-link"> 카테고리별 관리 </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="w-100 card card-nav-tabs text-center" style="width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title"> Goods Size </h4>
+                            <h6 class="card-subtitle mb-2 text-muted"> 상품 사이즈 그룹을 관리할 수 있습니다. </h6>
+                            <p class="card-text"> </p>
+                            <a href="size" class="card-link">사이즈 관리</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{> admin/include/footer}}
+        <!-- Chart JS -->
+        <script src="/js/plugins/chartjs.min.js"></script>
+        <!--  Notifications Plugin    -->
+        <script src="/js/plugins/bootstrap-notify.js"></script>
+        <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+        <script src="/js/paper-dashboard.min.js" type="text/javascript"></script>
+        <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+        <script src="/demo/demo.js"></script>
+    </body>
+</html>

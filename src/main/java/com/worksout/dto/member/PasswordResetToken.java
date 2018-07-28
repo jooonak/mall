@@ -14,6 +14,6 @@ public class PasswordResetToken {
 
     @NonNull private String token;
     @NonNull private Member member;
-    private Date expiryDate;
+    private Date expiryDt;
 
 }

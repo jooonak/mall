@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.shop.mapper.member.MemberMapper">
+<mapper namespace="com.worksout.mapper.member.MemberMapper">
 
     <resultMap id="findMember" type="Member">
         <id column="USERNAME" property="username" />
@@ -13,8 +13,8 @@
         <result column="ADDRESS" property="address" />
         <result column="DETAIL_ADDRESS" property="detailAddress" />
         <result column="POINT" property="point" />
-        <result column="UPD_DT" property="updDate" />
-        <result column="REG_DT" property="regDate" />
+        <result column="UPD_DT" property="updDt" />
+        <result column="REG_DT" property="regDt" />
 
         <collection property="roles" ofType="Role" >
             <id column="ROLE_ID" property="roleId" />
@@ -56,14 +56,14 @@
     
     <insert id="saveToken">
         INSERT INTO MEM_PWD_TOKEN
-                    (TOKEN, USERNAME, EXPIRY_DATE)
+                    (TOKEN, USERNAME, EXPIRY_DT)
              VALUES (#{token}, #{member.username}, NOW() + INTERVAL 12 HOUR)
     </insert>
 
 	<resultMap id="getToken" type="PasswordResetToken">
 		<!-- PASSWORD_RESET_TOKEN TABLE -->
 		<result column="TOKEN" property="token" />
-		<result column="EXPIRY_DT" property="expiryDate" />
+		<result column="EXPIRY_DT" property="expiryDt" />
 		<!-- /PASSWORD_RESET_TOKEN TABLE -->
 
 		<!-- MEMBER TABLE -->

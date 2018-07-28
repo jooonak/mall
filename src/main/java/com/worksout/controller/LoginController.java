@@ -11,11 +11,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class LoginController {
 
     @Autowired
     MemberService memberService;
+
+    @GetMapping("/sign-in")
+    public void signIn(HttpServletRequest req) {
+        if ( null != req.getHeader("Referer") && null != req.getSession(false) ) {
+            req.getSession(false).setAttribute("prev", req.getHeader("Referer"));
+        }
+    }
 
     @GetMapping("/sign-up")
     public void signUp() { }
@@ -49,8 +58,9 @@ public class LoginController {
         try {
             memberService.createPasswordResetToken(member);
             rttr.addFlashAttribute("message", "Successfully sent mail! please check your e-mail");
-            return "redirect:/login";
+            return "redirect:/sign-in";
         } catch (Exception e) {
+            e.printStackTrace();
             rttr.addFlashAttribute("message", "Fail to send mail. please try again");
             return "redirect:/forgot-password?fail";
         }

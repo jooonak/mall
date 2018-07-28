@@ -15,8 +15,8 @@ public class Member {
     private String address;
     private String detailAddress;
     private Integer point;
-    private Date updDate;
-    private Date regDate;
+    private Date updDt;
+    private Date regDt;
     private List<Role> roles;
 
 }

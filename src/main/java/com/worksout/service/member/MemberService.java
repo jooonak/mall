@@ -53,7 +53,7 @@ public class MemberService {
 	    	// 해당 토큰이 없거나 토큰에 해당하는 멤버 정보가 없을 때
 		    result = false;
 	    } else {
-		    if (storedToken.getExpiryDate().getTime() < calendar.getTime().getTime()) {
+		    if (storedToken.getExpiryDt().getTime() < calendar.getTime().getTime()) {
 		    	// 현재 시간과 토큰의 유효기간 비교
 			    result = false;
 		    }

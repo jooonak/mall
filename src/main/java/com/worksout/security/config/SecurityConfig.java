@@ -1,5 +1,6 @@
 package com.worksout.security.config;
 
+import com.worksout.security.handler.AuthSuccessHandler;
 import com.worksout.security.service.MemberDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -10,8 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
@@ -37,17 +40,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 					.and()
 				.authorizeRequests()
+						.antMatchers("/admin/**").hasRole("ADMIN")
 						.antMatchers("/**").permitAll()
 					.and()
 				.formLogin()
-						.loginPage("/login")
-//						.successHandler()
+						.loginPage("/sign-in")
+						.loginProcessingUrl("/login")
+						.successHandler(authSuccessHandler())
 //						.failureHandler()
 					.and()
 				.logout()
 						.logoutUrl("/logout")
 						.clearAuthentication(true)
-						.logoutSuccessUrl("/login?bye")
+						.logoutSuccessUrl("/sign-in?bye")
 //						.deleteCookies( /* cookie to need remove */ )
 						.invalidateHttpSession(true)
 					.and()
@@ -67,6 +72,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean  // 세션이 만료되는 Event 를 감지하는 Listener
 	public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
 		return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+	}
+
+	@Bean
+	public AuthenticationSuccessHandler authSuccessHandler() {
+		return new AuthSuccessHandler();
 	}
 
 }

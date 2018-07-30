@@ -28,16 +28,27 @@
     </div>
 </div>
 <!--   Core JS Files   -->
-<script src="/js/jquery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/jquery/perfect-scrollbar.jquery.min.js"></script>
 <script type="text/javascript">
     // url 과 일치하는 href 를 가진 태그의 부모에 active class
     $('.nav a').map( function (i, e) {
         var $e = $(e);
-        if ( $e.attr('href') === window.location.pathname ) {
-            $e.parent().attr('class', 'active');
+        var pathArr = window.location.pathname.split('/')
+        if (pathArr.length === 3) {
+            if ($e.attr('href') === window.location.pathname) {
+                $e.parent().attr('class', 'active');
+            }
+        } else {
+            var href = '';
+            for (var i = 0; i < 3; i++) {
+                 href += pathArr[i] + '/';
+            }
+            if ( $e.attr('href') === href ){
+                $e.parent().attr('class', 'active');
+            }
         }
     });
 </script>

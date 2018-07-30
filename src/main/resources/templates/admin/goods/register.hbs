@@ -1,0 +1,98 @@
+{{> admin/include/header}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css" rel="stylesheet">
+        <div class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>상품등록</h4><hr/>
+                        </div>
+                        <div class="card-body">
+                            <form class="col-md-6 col-sm-12 m-auto" action="/admin/goods/register" method="post">
+                                <div class="form-group">
+                                    <label>상품이름</label>
+                                    <input type="text" class="form-control" name="goodsNm"
+                                           placeholder="Goods Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">시즌 :
+                                        <select class="form-control" name="seasonNm" required>
+                                            {{#seasons}}
+                                                <option value="{{seasonNm}}">{{seasonNm}}</option>
+                                            {{/seasons}}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">카테고리 :
+                                        <select class="form-control" name="categoryNo" required>
+                                            {{#categories}}
+                                                <option value="{{categoryNo}}">{{categoryNm}}</option>
+                                            {{/categories}}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">사이즈 그룹 :
+                                        <select class="form-control" name="categoryNo" required>
+                                            {{#sizeGroup}}
+                                                <option value="{{groupNo}}">{{groupNm}}</option>
+                                            {{/sizeGroup}}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>상품 색상</label>
+                                    <input type="text" class="form-control" name="color"
+                                           placeholder="ex) White, Black, ..." required>
+                                    <span class="badge badge-pill badge-danger">색상간 쉼표 구분, 입력한 순서가 색상의 순서로 결정됩니다.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">대표색상 :
+                                        <select class="form-control" name="repColor" required>
+                                            <option value>색상 먼저 입력해주세요</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>공급가</label>
+                                    <input type="text" class="form-control" name="supplyPrice"
+                                           placeholder="supply price" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>판매가</label>
+                                    <input type="text" class="form-control" name="retailPrice"
+                                           placeholder="retail price" required>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-round float-right">저장</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{> admin/include/footer}}
+        <!--  Notifications Plugin    -->
+        <script src="/vendor/bootstrap/js/bootstrap-notify.js"></script>
+        <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+        <script src="/js/paper-dashboard.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var $color = $('input[name="color"]');
+                var colorArr = [];
+                $color.blur(function () {
+                    var colors = $color.val().split(",");
+                    var optionStr = '';
+
+                    colors.forEach(function (str) {
+                        var color = str.trim().toUpperCase();
+                        colorArr.push(color);
+                        optionStr += `<option value='${color}'>${color}</option>`;
+                    });
+                    $('select[name="repColor"]').html(optionStr);
+                });
+            });
+        </script>
+    </body>
+</html>

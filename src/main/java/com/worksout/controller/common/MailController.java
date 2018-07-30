@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MailController {
 
     @Autowired
-    Mailer mailer;
+    private Mailer mailer;
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     @GetMapping("/password-token")
     public String passwordToken(PasswordResetToken token, Model model) {

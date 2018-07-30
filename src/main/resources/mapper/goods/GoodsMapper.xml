@@ -6,8 +6,7 @@
 <mapper namespace="com.worksout.mapper.goods.GoodsMapper">
 
     <!-- ADMIN QUERY -->
-
-    <select id="selectGoodsList" resultType="goods">
+    <select id="getGoodsList" resultType="goods">
         SELECT /* getGoodsList */
                DISTINCT
                (SELECT DISTINCT MAIN_IMG FROM GOODS_INFO WHERE GOODS_NO = info.GOODS_NO AND COLOR = info.REP_COLOR) AS MAIN_IMG
@@ -23,7 +22,7 @@
           <include refid="goodsFilter" />
     </select>
     <sql id="goodsFilter">
-        <if test="_parameter == null">ORDER BY REG_DT DESC LIMIT 0, 10</if>
+        <if test="_parameter == null">ORDER BY REG_DT DESC LIMIT 0, 10</if>/* parameter == null ? goods main page : other page */
         <where>
             <if test="seasonNm != null and seasonNm != ''">AND SEASON = #{seasonNm}</if>
             <if test="categoryNo != null and categoryNo != 0">AND CATEGORY_NO = #{categoryNo}</if>

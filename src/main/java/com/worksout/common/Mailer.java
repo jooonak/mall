@@ -18,7 +18,7 @@ import java.util.Date;
 public class Mailer {
 
 	@Autowired
-	JavaMailSender mailSender;
+	private JavaMailSender mailSender;
 
 	public boolean sendToken(String to, String subject, String token) {
 

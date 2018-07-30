@@ -15,10 +15,10 @@ import java.util.UUID;
 public class MemberService {
 
 	@Autowired
-	Mailer mailSender;
+	private Mailer mailSender;
 
     @Autowired
-    MemberMapper memberMapper;
+    private MemberMapper memberMapper;
 
     @Transactional
     public void regMember(Member member) {

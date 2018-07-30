@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginController {
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     @GetMapping("/sign-in")
     public void signIn(HttpServletRequest req) {
@@ -70,11 +70,10 @@ public class LoginController {
     public String updatePassword(Member member, String token, RedirectAttributes rttr, Model model) {
 //        if (memberService.validatePasswordResetToken(member, token)) {
 //            model.addAttribute("userInfo", new PasswordResetToken(token, member));
-//            return null;
+            return null;
 //        }
 //        rttr.addFlashAttribute("updateResult","Expired or InvalidToken");
 //        return "redirect:/login";
-        return null;
     }
 
     @PostMapping("/update-password")
@@ -84,7 +83,7 @@ public class LoginController {
             member.setPassword(passwordEncoder.encode(member.getPassword()));
             memberService.updatePassword(member);
 
-            return "redirect:/login?updateSuccess";
+            return "redirect:/sign-in?updateSuccess";
         } catch (Exception e) {
             return "redirect:/update-password?fail";
         }

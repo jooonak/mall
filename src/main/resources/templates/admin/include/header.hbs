@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <!-- CSS Files -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/css/paper-dashboard.css" rel="stylesheet" />
 </head>
 <body>
@@ -141,7 +141,7 @@
                             <a class="nav-link btn-rotate" href="javascript:void(0)" data-toggle="modal" data-target="#myModal">
                                 <i class="nc-icon nc-user-run"></i>
                                 <p>
-                                    <span class="d-lg-none d-md-block">Account</span>
+                                    <span class="d-lg-none d-md-block">Sign out</span>
                                 </p>
                             </a>
                         </li>
@@ -166,13 +166,13 @@
                     </div>
                     <div class="modal-footer">
                         <div class="left-side">
-                            <button type="button" class="btn btn-default btn-link" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-default btn-link" data-dismiss="modal">Nope</button>
                         </div>
                         <div class="divider"></div>
                         <div class="right-side">
                             <form action="/logout" method="post">
                                 <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}" />
-                                <button type="submit" class="btn btn-danger btn-link">Yes!</button>
+                                <button type="submit" class="btn btn-danger btn-link">Yep</button>
                             </form>
                         </div>
                     </div>

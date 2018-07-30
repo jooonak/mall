@@ -68,12 +68,13 @@ public class LoginController {
 
     @GetMapping("/update-password")
     public String updatePassword(Member member, String token, RedirectAttributes rttr, Model model) {
-        if (memberService.validatePasswordResetToken(member, token)) {
-            model.addAttribute("userInfo", new PasswordResetToken(token, member));
-            return null;
-        }
-        rttr.addFlashAttribute("updateResult","Expired or InvalidToken");
-        return "redirect:/login";
+//        if (memberService.validatePasswordResetToken(member, token)) {
+//            model.addAttribute("userInfo", new PasswordResetToken(token, member));
+//            return null;
+//        }
+//        rttr.addFlashAttribute("updateResult","Expired or InvalidToken");
+//        return "redirect:/login";
+        return null;
     }
 
     @PostMapping("/update-password")

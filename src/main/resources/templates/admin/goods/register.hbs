@@ -1,5 +1,5 @@
 {{> admin/include/header}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css" rel="stylesheet">
         <div class="content">
             <div class="row">
                 <div class="col-12">
@@ -45,7 +45,7 @@
                                     <label>상품 색상</label>
                                     <input type="text" class="form-control" name="color"
                                            placeholder="ex) White, Black, ..." required>
-                                    <span class="badge badge-pill badge-danger">색상간 쉼표 구분, 입력한 순서가 색상의 순서로 결정됩니다.</span>
+                                    <span class="badge badge-pill badge-danger">색상간 쉼표 구분, 입력한 순서가 진열 순서로 결정됩니다.</span>
                                 </div>
                                 <div class="form-group">
                                     <label class="d-block">대표색상 :
@@ -64,6 +64,11 @@
                                     <input type="text" class="form-control" name="retailPrice"
                                            placeholder="retail price" required>
                                 </div>
+                                <div class="form-group">
+                                    <label for="summernote">상품설명</label>
+                                    <textarea id="summernote" name="goodsDesc"></textarea>
+                                </div>
+                                <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}" />
                                 <button type="submit" class="btn btn-success btn-round float-right">저장</button>
                             </form>
                         </div>
@@ -79,6 +84,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js"></script>
         <script type="text/javascript">
             $(function () {
+                var $summernote = $('#summernote');
                 var $color = $('input[name="color"]');
                 var colorArr = [];
                 $color.blur(function () {
@@ -92,6 +98,15 @@
                     });
                     $('select[name="repColor"]').html(optionStr);
                 });
+
+                $summernote.summernote({
+                    placeholder: '상품 설명을 입력해주세요',
+                    disableDragAndDrop: true,
+                    tabSize: 2,
+                    minHeight: 200
+                });
+
+                $('div.note-editor').addClass('form-control');
             });
         </script>
     </body>

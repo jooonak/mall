@@ -28,5 +28,6 @@ public class GoodsService {
     }
 
     public void registerGoods(Goods goods) {
+        System.out.println(goods);
     }
 }

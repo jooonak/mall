@@ -23,7 +23,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth) throws IOException, ServletException {
         clearAuthAttr(req);
         strategy.sendRedirect(req, res, defineSuccessUrl(req, auth));
-
+        req.getSession(false).setAttribute("username", auth.getName());
     }
 
     private String defineSuccessUrl(HttpServletRequest req, Authentication auth) {

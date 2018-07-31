@@ -1950,7 +1950,7 @@ fieldset[disabled] .btn-link.active {
 .form-group .input-group-append .input-group-text,
 .input-group .input-group-prepend .input-group-text,
 .input-group .input-group-append .input-group-text {
-  padding: 10px 0 10px 10px;
+  /*padding: 10px 0 10px 10px;*/
 }
 
 .form-group .input-group-prepend .input-group-text+.form-control,
@@ -2176,22 +2176,20 @@ fieldset[disabled] .btn-link.active {
 
 .input-group .form-control:not(:first-child):not(:last-child),
 .input-group-btn:not(:first-child):not(:last-child) {
-  border-radius: 4px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-radius: 0 4px 4px 0;
   border-left: 0 none;
 }
 
 .input-group .form-control:first-child,
 .input-group-btn:first-child>.dropdown-toggle,
 .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {
-  border-right: 0 none;
+  /*border-right: 0 none;*/
 }
 
 .input-group .form-control:last-child,
 .input-group-btn:last-child>.dropdown-toggle,
 .input-group-btn:first-child>.btn:not(:first-child) {
-  border-left: 0 none;
+  /*border-left: 0 none;*/
 }
 
 .form-control[disabled],
@@ -2296,7 +2294,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
 h1,
@@ -2494,7 +2492,7 @@ a.text-gray:hover {
 body {
   color: #2c2c2c;
   font-size: 14px;
-  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
@@ -5571,7 +5569,7 @@ License - nucleoapp.com/license/
 
 .card label {
   font-size: 0.8571em;
-  margin-bottom: 5px;
+  /*margin-bottom: 5px;*/
   color: #9A9A9A;
 }
 

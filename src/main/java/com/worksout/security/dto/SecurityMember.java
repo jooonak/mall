@@ -17,7 +17,7 @@ public class SecurityMember extends User {
     private Member member;
 
     public SecurityMember(Member member) {
-        super(member.getUsername(), member.getPassword(), getGrantedAuthorities(member.getRoles()));
+        super(member.getName(), member.getPassword(), getGrantedAuthorities(member.getRoles()));
         this.member = member;
     }
 

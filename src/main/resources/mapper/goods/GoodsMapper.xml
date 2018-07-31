@@ -19,10 +19,28 @@
                , RETAIL_PRICE
           FROM
                GOODS_INFO info
+      ORDER BY REG_DT DESC
+               LIMIT 0, 10
+    </select>
+
+    <select id="getConditionalGoodsList" resultType="goods">
+        SELECT /* getConditionalGoodsList */
+               DISTINCT
+               (SELECT DISTINCT MAIN_IMG FROM GOODS_INFO WHERE GOODS_NO = info.GOODS_NO AND COLOR = info.REP_COLOR) AS MAIN_IMG
+               , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
+               , GOODS_NO
+               , GOODS_NM
+               , REP_COLOR
+               , SEASON
+               , SUPPLY_PRICE
+               , RETAIL_PRICE
+          FROM
+               GOODS_INFO info
           <include refid="goodsFilter" />
+      ORDER BY REG_DT DESC
     </select>
     <sql id="goodsFilter">
-        <if test="_parameter == null">ORDER BY REG_DT DESC LIMIT 0, 10</if>/* parameter == null ? goods main page : other page */
+        <if test="_parameter == null">ORDER BY REG_DT DESC LIMIT 0, 10</if>
         <where>
             <if test="seasonNm != null and seasonNm != ''">AND SEASON = #{seasonNm}</if>
             <if test="categoryNo != null and categoryNo != 0">AND CATEGORY_NO = #{categoryNo}</if>
@@ -36,99 +54,43 @@
         </where>
     </sql>
 
-    <resultMap id="selectGoods" type="goods">
-        <id column="GOODS_NO" property="goodsNo" />
-        <result column="GOODS_NM" property="goodsNm" />
-        <result column="GOODS_DESC" property="goodsDesc" />
-        <result column="CATEGORY_NO" property="categoryNo" />
-        <result column="CATEGORY_Nm" property="categoryNm" />
-        <result column="SEASON" property="season" />
-        <result column="REP_COLOR" property="repColor" />
-        <result column="SIZE_GROUP_NO" property="sizeGroupNo" />
-        <result column="SIZE_GROUP_NM" property="sizeGroupNm" />
-        <result column="SUPPLY_PRICE" property="supplyPrice" />
-        <result column="RETAIL_PRICE" property="retailPrice" />
-        <result column="DISPLAY_YN" property="displayYn" />
-        <collection property="colors" ofType="String">
-            <result column="COLOR" property="colors" />
-        </collection>
-        <collection property="mainImgs" ofType="String">
-            <result column="MAIN_IMG" property="mainImgs" />
-        </collection>
-        <collection property="imgs" ofType="GoodsImg" column="GOODS_NO" select="selectGoodsImg"/>
-    </resultMap>
-    <select id="getGoods" resultMap="selectGoods">
-        SELECT /* getGoods */
-               DISTINCT
-               CATEGORY_NO
-               , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
-               , SEASON
-               , GOODS_NO
-               , GOODS_NM
-               , GOODS_DESC
-               , COLOR
-               , REP_COLOR
-               , SIZE_GROUP_NO
-               , (SELECT DISTINCT GROUP_NM FROM GOODS_SIZE_GROUP WHERE GROUP_NO = info.SIZE_GROUP_NO) AS SIZE_GROUP_NM
-               , SUPPLY_PRICE
-               , RETAIL_PRICE
-               , DISPLAY_YN
-               , MAIN_IMG
-               , COLOR_ORD
-          FROM
-               GOODS_INFO info
-         WHERE
-               GOODS_NO = #{goodsNo}
-      ORDER BY COLOR_ORD ASC
-    </select>
-    <select id="selectGoodsImg" resultType="GoodsImg">
-        SELECT /* selectGoodsImg */
-               GOODS_NO
-               , FILENAME
-               , ORD
-          FROM
-               GOODS_IMG
-         WHERE
-               GOODS_NO = #{goodsNo}
-      ORDER BY ORD ASC
-    </select>
-
-    <update id="updateGoods">
-        UPDATE GOODS_INFO /* updateGoods */
-           SET
-               CATEGORY_NO = #{categoryNo}
-               , SEASON = #{season}
-               , GOODS_NM = #{goodsNm}
-               , REP_COLOR = #{repColor}
-               , GOODS_DESC = #{goodsDesc}
-               , SUPPLY_PRICE = #{supplyPrice}
-               , RETAIL_PRICE = #{retailPrice}
-               , DISPLAY_YN = #{displayYn}
-               , UPDR = #{updr}
-               , UPD_DT = NOW()
-         WHERE
-               GOODS_NO = #{goodsNo}
-    </update>
-
-    <update id="updateGoodsImgOrd">
-        UPDATE /* updateGoodsImgOrd */
-               GOODS_IMG
-           SET
-               ORD =
-               (CASE FILENAME
-                    <foreach collection="imgs" item="img">
-                        WHEN #{img.filename} THEN #{img.ord}
+    <insert id="registerGoods">
+        INSERT INTO GOODS_INFO
+                    (
+                    CATEGORY_NO
+                    , SEASON
+                    , GOODS_NO
+                    , GOODS_NM
+                    , COLOR
+                    , REP_COLOR
+                    , COLOR_ORD
+                    , SIZE_GROUP_NO
+                    , GOODS_DESC
+                    , SUPPLY_PRICE
+                    , RETAIL_PRICE
+                    , REGR
+                    , REG_DT
+                    )
+             VALUES
+                    <foreach collection="list" item="goods" separator=",">
+                        (
+                        #{goods.categoryNo}
+                        , #{goods.season}
+                        , #{goods.goodsNo}
+                        , #{goods.goodsNm}
+                        , #{goods.color}
+                        , #{goods.repColor}
+                        , #{goods.colorOrd}
+                        , #{goods.sizeGroupNo}
+                        , #{goods.goodsDesc}
+                        , #{goods.supplyPrice}
+                        , #{goods.retailPrice}
+                        , #{goods.regr}
+                        , NOW()
+                        )
                     </foreach>
-                ELSE ORD
-                END
-               )
-         WHERE
-               FILENAME IN
-               <foreach collection="imgs" item="img" open="(" close=")" separator=",">
-               #{img.filename}
-               </foreach>
-    </update>
-
+    </insert>
+    
     <!-- SHOP QUERY -->
     <resultMap id="goodsListShop" type="Goods">
         <id column="GOODS_NO" property="goodsNo" />

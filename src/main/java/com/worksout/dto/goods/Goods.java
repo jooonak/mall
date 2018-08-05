@@ -13,14 +13,9 @@ public class Goods {
     private String season;              //시즌
     private String goodsNo;             //상품번호
     private String goodsNm;             //상품명
-    private String color;               //색상
     private String repColor;            //대표색상
     private Integer sizeGroupNo;        //사이즈그룹 번호
     private String goodsDesc;           //상품설명
-    private Integer supplyPrice;        //공급가
-    private Integer retailPrice;        //소매가
-    private Integer onSalePrice;        //세일가
-    private Integer colorOrd;           //색상별 노출순서
     private Integer categoryOrd;        //카테고리페이지 노출순서
     private Integer mainOrd;            //메인페이지 노출순서
     private boolean displayYn;          //노출여부
@@ -31,6 +26,9 @@ public class Goods {
     private Date regDt;                 //등록날짜
 
     //추가 필요 데이터
+    private GoodsDetail detail;         //상세정보
+    private List<GoodsDetail> details;  //상세정보 리스트
+    private String color;               //색상
     private List<String> colors;        //전체색상
     private List<String> mainImgs;      //색상별 메인이미지 리스트
     private List<GoodsImg> imgs;        //상품이미지 리스트

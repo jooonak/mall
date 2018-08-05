@@ -6,6 +6,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title text-center"> Goods List </h4>
+                            <a href="/admin/goods/register"><button class="btn btn-round btn-warning float-right">상품 등록</button></a>
                             <form>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -47,7 +48,7 @@
                                     </label>
                                         <input id="sch" class="form-control" type="text" name="searchTxt">
                                 </div>
-                                <button class="btn btn-primary float-right"><i class="nc-icon nc-zoom-split"></i> 검색 </button>
+                                <button class="btn btn-info float-right"><i class="nc-icon nc-zoom-split"></i> 검색 </button>
                             </form>
                         </div>
                         <div class="card-body">
@@ -67,7 +68,7 @@
                                         <tr class="text-center">
                                             <td width="15%"><img width="70px" src="http://img.worksout.co.kr/shop/img{{mainImg}}" onerror="this.src='/img/no-image.png'"></td>
                                             <td width="10%">{{categoryNm}}</td>
-                                            <td width="20%"><a href="/admin/goodsDetail?goodsNo={{goodsNo}}">{{goodsNm}}</a></td>
+                                            <td width="20%"><a href="/admin/goods/{{goodsNo}}">{{goodsNm}}</a></td>
                                             <td width="15%">{{repColor}}</td>
                                             <td width="15%">{{season}}</td>
                                             <td width="15%">{{supplyPrice}}</td>
@@ -90,6 +91,9 @@
         <script src="/vendor/datatables/jquery.dataTables.js" ></script>
         <script src="/vendor/datatables/dataTables.bootstrap4.js" ></script>
         <script type="text/javascript">
+            {{#regResult}}
+                alert('{{regResult}}');
+            {{/regResult}}
             $(function () {
                $('.table').DataTable();
             });

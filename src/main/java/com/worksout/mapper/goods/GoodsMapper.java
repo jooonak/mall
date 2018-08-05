@@ -25,6 +25,12 @@ public interface GoodsMapper {
     @Select("SELECT /* getSizeGroup */ DISTINCT GROUP_NO, GROUP_NM FROM GOODS_SIZE_GROUP ORDER BY DISPLAY_ORD ASC")
     List<GoodsSizeGroup> getSizeGroup();
 
-    void registerGoods(List<Goods> goodsList);
+    @Select("SELECT /* getSizeDetail */ SIZE FROM GOODS_SIZE_GROUP WHERE GROUP_NO = #{sizeGroupNo} ORDER BY SIZE_ORD")
+    List<String> getSizeDetail(Goods goods);
 
+    void registerGoods(Goods goods);
+
+    void registerGoodsDetail(Goods goods);
+
+    Goods getGoods(String goodsNo);
 }

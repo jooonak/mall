@@ -8,15 +8,12 @@
     <!-- ADMIN QUERY -->
     <select id="getGoodsList" resultType="goods">
         SELECT /* getGoodsList */
-               DISTINCT
-               (SELECT DISTINCT MAIN_IMG FROM GOODS_INFO WHERE GOODS_NO = info.GOODS_NO AND COLOR = info.REP_COLOR) AS MAIN_IMG
+               MAIN_IMG
                , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
                , GOODS_NO
                , GOODS_NM
-               , REP_COLOR
                , SEASON
-               , SUPPLY_PRICE
-               , RETAIL_PRICE
+               , REP_COLOR
           FROM
                GOODS_INFO info
       ORDER BY REG_DT DESC
@@ -25,15 +22,12 @@
 
     <select id="getConditionalGoodsList" resultType="goods">
         SELECT /* getConditionalGoodsList */
-               DISTINCT
-               (SELECT DISTINCT MAIN_IMG FROM GOODS_INFO WHERE GOODS_NO = info.GOODS_NO AND COLOR = info.REP_COLOR) AS MAIN_IMG
+               MAIN_IMG
                , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
                , GOODS_NO
                , GOODS_NM
-               , REP_COLOR
                , SEASON
-               , SUPPLY_PRICE
-               , RETAIL_PRICE
+               , REP_COLOR
           FROM
                GOODS_INFO info
           <include refid="goodsFilter" />
@@ -47,50 +41,89 @@
             <if test="searchGb != null and searchGb != '' and searchTxt != null and searchTxt != ''">
                 AND UPPER(${searchGb}) like CONCAT(CONCAT('%',UPPER(#{searchTxt})),'%')
             </if>
-            <if test="minPrice != null and minPrice != 0">AND RETAIL_PRICE <![CDATA[>]]> #{minPrice}</if>
-            <if test="maxPrice != null and maxPrice != 0">AND RETAIL_PRICE <![CDATA[<]]> #{maxPrice}</if>
-            <if test="sizeGroupNo != null and sizeGroupNo != 0">AND SIZE_GROUP_NO = #{sizeGroupNo}</if>
             <if test="displayYn != null">AND DISPLAY_YN = #{displayYn}</if>
         </where>
     </sql>
 
     <insert id="registerGoods">
-        INSERT INTO GOODS_INFO
+        INSERT INTO GOODS_INFO /* registerGoods */
                     (
                     CATEGORY_NO
                     , SEASON
                     , GOODS_NO
                     , GOODS_NM
-                    , COLOR
                     , REP_COLOR
-                    , COLOR_ORD
                     , SIZE_GROUP_NO
                     , GOODS_DESC
-                    , SUPPLY_PRICE
-                    , RETAIL_PRICE
                     , REGR
                     , REG_DT
                     )
              VALUES
-                    <foreach collection="list" item="goods" separator=",">
-                        (
-                        #{goods.categoryNo}
-                        , #{goods.season}
-                        , #{goods.goodsNo}
-                        , #{goods.goodsNm}
-                        , #{goods.color}
-                        , #{goods.repColor}
-                        , #{goods.colorOrd}
-                        , #{goods.sizeGroupNo}
-                        , #{goods.goodsDesc}
-                        , #{goods.supplyPrice}
-                        , #{goods.retailPrice}
-                        , #{goods.regr}
-                        , NOW()
-                        )
+                    (
+                    #{categoryNo}
+                    , #{season}
+                    , #{goodsNo}
+                    , #{goodsNm}
+                    , #{repColor}
+                    , #{sizeGroupNo}
+                    , #{goodsDesc}
+                    , #{regr}
+                    , NOW()
+                    )
+    </insert>
+
+    <insert id="registerGoodsDetail">
+        INSERT INTO GOODS_DETAIL /* registerGoodsDetail */
+                    (
+                    GOODS_NO
+                    , COLOR
+                    , SIZE
+                    , COLOR_ORD
+                    , SIZE_ORD
+                    , SUPPLY_PRICE
+                    , RETAIL_PRICE
+                    , ACTUAL_PRICE
+                    , REGR
+                    , REG_DT
+                    )
+             VALUES
+                    <foreach collection="details" item="detail" separator=",">
+                    (
+                    #{detail.goodsNo}
+                    , #{detail.color}
+                    , #{detail.size}
+                    , #{detail.colorOrd}
+                    , #{detail.sizeOrd}
+                    , #{detail.supplyPrice}
+                    , #{detail.retailPrice}
+                    , #{detail.actualPrice}
+                    , #{detail.regr}
+                    , NOW()
+                    )
                     </foreach>
     </insert>
-    
+
+    <select id="getGoods" resultType="goods">
+        SELECT /* getGoods */
+               info.GOODS_NO
+               , GOODS_NM
+               , CATEGORY_NO
+               , SEASON
+               , GOODS_DESC
+               , COLOR
+               , STOCK
+               , SUPPLY_PRICE
+               , ACTUAL_PRICE
+          FROM
+               GOODS_INFO info
+          JOIN
+               GOODS_DETAIL detail
+            ON
+               info.GOODS_NO = detail.GOODS_NO
+         WHERE
+               info.GOODS_NO = #{_parameter}
+    </select>
+
     <!-- SHOP QUERY -->
     <resultMap id="goodsListShop" type="Goods">
         <id column="GOODS_NO" property="goodsNo" />

@@ -23,7 +23,7 @@ public class MailController {
     public String passwordToken(PasswordResetToken token, Model model) {
         PasswordResetToken resetToken = memberService.getToken(token);
         model.addAttribute("resetToken", resetToken);
-        return "common/password-token";
+        return "/common/password-token";
     }
 
 }

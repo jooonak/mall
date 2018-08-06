@@ -13,7 +13,6 @@
                , GOODS_NO
                , GOODS_NM
                , SEASON
-               , REP_COLOR
           FROM
                GOODS_INFO info
       ORDER BY REG_DT DESC
@@ -27,7 +26,6 @@
                , GOODS_NO
                , GOODS_NM
                , SEASON
-               , REP_COLOR
           FROM
                GOODS_INFO info
           <include refid="goodsFilter" />
@@ -52,7 +50,6 @@
                     , SEASON
                     , GOODS_NO
                     , GOODS_NM
-                    , REP_COLOR
                     , SIZE_GROUP_NO
                     , GOODS_DESC
                     , REGR
@@ -64,7 +61,6 @@
                     , #{season}
                     , #{goodsNo}
                     , #{goodsNm}
-                    , #{repColor}
                     , #{sizeGroupNo}
                     , #{goodsDesc}
                     , #{regr}
@@ -103,17 +99,32 @@
                     </foreach>
     </insert>
 
-    <select id="getGoods" resultType="goods">
-        SELECT /* getGoods */
+    <resultMap id="goodsDetail" type="goods">
+        <id column="GOODS_NO" property="goodsNo" />
+        <result column="GOODS_NM" property="goodsNm" />
+        <result column="CATEGORY_NM" property="categoryNm" />
+        <result column="SIZE_GROUP_NM" property="sizeGroupNm" />
+        <result column="SIZE_GROUP_No" property="sizeGroupNo" />
+        <result column="SEASON" property="season" />
+        <result column="SUPPLY_PRICE" property="detail.supplyPrice" />
+        <result column="RETAIL_PRICE" property="detail.retailPrice" />
+        <result column="GOODS_DESC" property="goodsDesc" />
+        <collection property="colors" ofType="String">
+            <result column="COLOR" property="colors" />
+        </collection>
+    </resultMap>
+    <select id="getGoods" resultMap="goodsDetail">
+        SELECT DISTINCT /* getGoods */
                info.GOODS_NO
                , GOODS_NM
-               , CATEGORY_NO
+               , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
+               , (SELECT DISTINCT GROUP_NM FROM GOODS_SIZE_GROUP WHERE GROUP_NO = info.SIZE_GROUP_NO) AS SIZE_GROUP_NM
+               , SIZE_GROUP_NO
                , SEASON
-               , GOODS_DESC
                , COLOR
-               , STOCK
                , SUPPLY_PRICE
-               , ACTUAL_PRICE
+               , RETAIL_PRICE
+               , GOODS_DESC
           FROM
                GOODS_INFO info
           JOIN
@@ -122,15 +133,30 @@
                info.GOODS_NO = detail.GOODS_NO
          WHERE
                info.GOODS_NO = #{_parameter}
+      ORDER BY COLOR_ORD
     </select>
 
+    <update id="updateGoods">
+        UPDATE GOODS_INFO
+        SET
+        GOODS_NO = #{goodsNo}
+        , SEASON = #{season}
+        , CATEGORY_NO = #{categoryNo}
+        <if test="sizeGroupNo != null">
+            , SIZE_GROUP_NO = #{sizeGroupNo}
+        </if>
+        , DISPLAY_YN = #{displayYn}
+        , UPDR = #{updr}
+        , UPD_DT = NOW()
+        WHERE GOODS_NO = #{goodsNo}
+    </update>
+
     <!-- SHOP QUERY -->
-    <resultMap id="goodsListShop" type="Goods">
+    <resultMap id="goodsListShop" type="goods">
         <id column="GOODS_NO" property="goodsNo" />
         <result column="GOODS_NM" property="goodsNm" />
         <result column="CATEGORY_NO" property="categoryNo" />
         <result column="SEASON" property="season" />
-        <result column="REP_COLOR" property="repColor" />
         <result column="RETAIL_PRICE" property="retailPrice" />
         <result column="REP_IMG" property="repImg" />
         <collection property="colors" ofType="String">
@@ -146,7 +172,6 @@
 	           , SEASON
 	           , GOODS_NO
 	           , GOODS_NM
-	           , REP_COLOR
 	           , COLOR
 	           , RETAIL_PRICE
 	           , COLOR_ORD

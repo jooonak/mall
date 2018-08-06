@@ -51,29 +51,28 @@ public class LoginController {
 
         Member member = memberService.findMember(username);
         if ( member == null ) {
-            rttr.addFlashAttribute("message", "Could not found user for username : " + username);
+            rttr.addFlashAttribute("result", "Could not found user for username : " + username);
             return "redirect:/forgot-password?fail";
         }
 
         try {
             memberService.createPasswordResetToken(member);
-            rttr.addFlashAttribute("message", "Successfully sent mail! please check your e-mail");
-            return "redirect:/sign-in";
+            rttr.addFlashAttribute("result", "Successfully sent mail! please check your e-mail");
         } catch (Exception e) {
+            rttr.addFlashAttribute("result", "Fail to send mail. please try again");
             e.printStackTrace();
-            rttr.addFlashAttribute("message", "Fail to send mail. please try again");
-            return "redirect:/forgot-password?fail";
         }
+        return "redirect:/sign-in";
     }
 
     @GetMapping("/update-password")
     public String updatePassword(Member member, String token, RedirectAttributes rttr, Model model) {
-//        if (memberService.validatePasswordResetToken(member, token)) {
+        if (memberService.validatePasswordResetToken(member, token)) {
             model.addAttribute("userInfo", new PasswordResetToken(token, member));
             return null;
-//        }
-//        rttr.addFlashAttribute("updateResult","Expired or InvalidToken");
-//        return "redirect:/login";
+        }
+        rttr.addFlashAttribute("updateResult","만료됐거나 유효하지 않은 링크입니다.");
+        return "redirect:/login";
     }
 
     @PostMapping("/update-password")

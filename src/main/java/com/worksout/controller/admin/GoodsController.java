@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/admin/goods")
 public class GoodsController {
@@ -28,7 +30,7 @@ public class GoodsController {
     }
 
     @GetMapping("/list")
-    public void goodsList(Model model, @ModelAttribute("seeker") GoodsSeeker seeker) {
+    public void goodsList (Model model, @ModelAttribute("seeker") GoodsSeeker seeker) {
         model.addAttribute("goodsList", goodsService.getGoodsList(seeker));
         model.addAttribute("seasons", seasonService.getSeasons());
         model.addAttribute("categories", goodsService.getCategoryList());
@@ -54,8 +56,27 @@ public class GoodsController {
 
     @GetMapping("/{goodsNo}")
     public String goodsDetailPage (@PathVariable("goodsNo") String goodsNo, Model model) {
+        model.addAttribute("seasons", seasonService.getSeasons());
+        model.addAttribute("categories", goodsService.getCategoryList());
+        model.addAttribute("sizeGroup", goodsService.getSizeGroup());
         model.addAttribute("goods", goodsService.getGoods(goodsNo));
         return "/admin/goods/detail";
+    }
+
+    @PostMapping("/update")
+    public void updateGoods (Goods goods, RedirectAttributes rttr, HttpServletRequest req) {
+        try {
+            String prev = req.getHeader("Referer");
+            System.out.println(prev);
+            System.out.println(goods);
+            goodsService.updateGoods(goods);
+            rttr.addFlashAttribute("updateResult", "Update Success!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            rttr.addFlashAttribute("updateResult", "Update Fail...");
+        }
+
+//        return "redirect:/admin/goods/list";
     }
 
 }

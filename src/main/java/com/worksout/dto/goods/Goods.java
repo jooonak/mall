@@ -13,7 +13,6 @@ public class Goods {
     private String season;              //시즌
     private String goodsNo;             //상품번호
     private String goodsNm;             //상품명
-    private String repColor;            //대표색상
     private Integer sizeGroupNo;        //사이즈그룹 번호
     private String goodsDesc;           //상품설명
     private Integer categoryOrd;        //카테고리페이지 노출순서
@@ -30,12 +29,13 @@ public class Goods {
     private List<GoodsDetail> details;  //상세정보 리스트
     private String color;               //색상
     private List<String> colors;        //전체색상
-    private List<String> mainImgs;      //색상별 메인이미지 리스트
-    private List<GoodsImg> imgs;        //상품이미지 리스트
     private String categoryNm;          //카테고리 이름
     private String sizeGroupNm;         //사이즈그룹 이름
     private String repImg;              //대표색상 이미지
+    private List<String> mainImgs;      //색상별 메인이미지 리스트
+    private List<GoodsImg> imgs;        //상품이미지 리스트
 
+    //업데이트시 필요 데이터
     private String originColor;         //기존 상품색상 ( 상품 업데이트시 사용 )
     private Integer originSizeGroupNo;  //기존 사이즈그룹 번호 ( 상품 업데이트시 사용 )
 

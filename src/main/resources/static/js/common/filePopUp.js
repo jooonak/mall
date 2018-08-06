@@ -1,4 +1,4 @@
-window.imagePop = function (url) {
+window.centeredHalfPop = function (url) {
     var w = screen.width / 3;
     var h = screen.height / 4;
     var l = (screen.width / 2) - (w / 2);

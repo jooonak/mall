@@ -1,5 +1,15 @@
 {{> admin/include/header}}
         <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+		<style>
+			.custom-control-label::before{
+				top: 0;
+				left: -1.2rem;
+			}
+			.custom-control-label::after {
+				top: 0;
+				left: -1.2rem;
+			}
+		</style>
         <div class="content">
             <div class="row">
                 <div class="col-md-6 col-sm-12">
@@ -33,24 +43,27 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead class="text-primary text-center">
+										<th>노출여부</th>
                                         <th>이미지</th>
                                         <th>카테고리</th>
                                         <th>상품명</th>
                                         <th>대표색상</th>
                                         <th>시즌</th>
-                                        <th>공급가</th>
-                                        <th>판매가</th>
                                     </thead>
                                     <tbody>
                                     {{#goodsList}}
                                         <tr class="text-center">
+											<td width="5%">
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" id="{{goodsNo}}">
+													<label class="custom-control-label" for="{{goodsNo}}">노출</label>
+												</div>
+											</td>
                                             <td width="15%"><img width="70px" src="http://img.worksout.co.kr/shop/img{{mainImg}}" onerror="this.src='/img/no-image.png'"></td>
                                             <td width="10%">{{categoryNm}}</td>
                                             <td width="20%"><a href="/admin/goods/{{goodsNo}}">{{goodsNm}}</a></td>
                                             <td width="15%">{{repColor}}</td>
                                             <td width="15%">{{season}}</td>
-                                            <td width="15%">{{supplyPrice}}</td>
-                                            <td width="15%">{{retailPrice}}</td>
                                         </tr>
                                     {{/goodsList}}
                                     </tbody>

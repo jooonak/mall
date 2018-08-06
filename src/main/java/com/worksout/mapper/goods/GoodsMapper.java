@@ -6,6 +6,7 @@ import com.worksout.dto.goods.GoodsSeeker;
 import com.worksout.dto.goods.GoodsSizeGroup;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -33,4 +34,9 @@ public interface GoodsMapper {
     void registerGoodsDetail(Goods goods);
 
     Goods getGoods(String goodsNo);
+
+	void updateGoods(Goods goods);
+
+    @Update("")
+    void updateGoodsDetail(Goods goods);
 }

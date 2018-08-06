@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Log
@@ -49,7 +48,7 @@ public class GoodsService {
     public void registerGoods(Goods goods) {
         goods.setGoodsNo(selectGoodsNo()); // 같은 상품은 색상 구별없이 같은 품번 세팅
         List<String> goodsSizes = goodsMapper.getSizeDetail(goods);
-        String[] colors = goods.getDetail().getColor().split(",");
+        String[] colors = goods.getDetail().getColor().split(","); // 입력받은 색상 ex) white, black, navy
 
         goods.setDetails(new ArrayList<>());
         goods.getDetail().setRegr(goods.getRegr());
@@ -77,5 +76,11 @@ public class GoodsService {
 
     public Goods getGoods(String goodsNo) {
         return goodsMapper.getGoods(goodsNo);
+    }
+
+    @Transactional
+    public void updateGoods(Goods goods) {
+        goodsMapper.updateGoods(goods);
+        goodsMapper.updateGoodsDetail(goods);
     }
 }

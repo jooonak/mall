@@ -1,12 +1,18 @@
 package com.worksout;
 
+import com.worksout.common.FTPWorker;
 import com.worksout.mapper.TestMapper;
 import lombok.extern.java.Log;
+import org.apache.commons.net.ftp.FTPClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @Log
 @RunWith(SpringRunner.class)
@@ -17,12 +23,17 @@ public class MallApplicationTests {
 	public void contextLoads() {
 	}
 
+	@Value("${ftp.image.path}")
+	private String imgPath;
+
 	@Autowired
-	TestMapper testMapper;
+	FTPClient ftpClient;
 
-	@Test
-	public void dbTest() {
-		log.info(testMapper.now());
+	@Autowired
+	private FTPWorker ftpWorker;
+
+	public void FTPTest () throws IOException{
+
+		ftpWorker.sendFile(imgPath, "testFile.jpg", new FileInputStream("C:\\Users\\Administrator\\Desktop\\image\\000001-gray.jpg"));
 	}
-
 }

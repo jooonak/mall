@@ -80,7 +80,21 @@ public class GoodsService {
 
     @Transactional
     public void updateGoods(Goods goods) {
-        goodsMapper.updateGoods(goods);
-        goodsMapper.updateGoodsDetail(goods);
+        goodsUpdate(goods);
+        goodsDetailUpdate(goods);
+    }
+
+    private int goodsUpdate(Goods goods) {
+        //TODO: 사이즈 그룹 또는 색상 수정이 있을 시 로직 처리 해줘야함
+        //사이즈 그룹 변경시 -> 변경된 사이즈에 맞는 세부정보..
+        //색상 변경시 기존 색상에서 변경된 색상만 수정 또는 기존 있던 색상 삭제 후 새로운 데이터 삽입..
+        if (goods.getSizeGroupNo().equals(goods.getOriginSizeGroupNo())) {
+            goods.setSizeGroupNo(null);
+        }
+        return goodsMapper.updateGoods(goods);
+    }
+
+    private int goodsDetailUpdate(Goods goods) {
+        return goodsMapper.updateGoodsDetail(goods);
     }
 }

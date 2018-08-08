@@ -138,17 +138,25 @@
 
     <update id="updateGoods">
         UPDATE GOODS_INFO
-        SET
-        GOODS_NO = #{goodsNo}
-        , SEASON = #{season}
-        , CATEGORY_NO = #{categoryNo}
-        <if test="sizeGroupNo != null">
-            , SIZE_GROUP_NO = #{sizeGroupNo}
-        </if>
-        , DISPLAY_YN = #{displayYn}
-        , UPDR = #{updr}
-        , UPD_DT = NOW()
-        WHERE GOODS_NO = #{goodsNo}
+           SET
+               SEASON = #{season}
+               , CATEGORY_NO = #{categoryNo}
+               <if test="sizeGroupNo != null">
+               , SIZE_GROUP_NO = #{sizeGroupNo}
+               </if>
+               , UPDR = #{updr}
+               , UPD_DT = NOW()
+         WHERE GOODS_NO = #{goodsNo}
+    </update>
+
+    <update id="updateGoodsDetail">
+        UPDATE GOODS_DETAIL
+           SET
+               SUPPLY_PRICE = #{detail.supplyPrice}
+               , RETAIL_PRICE = #{detail.retailPrice}
+               , UPDR = #{updr}
+               , UPD_DT = NOW()
+         WHERE GOODS_NO = #{goodsNo}
     </update>
 
     <!-- SHOP QUERY -->

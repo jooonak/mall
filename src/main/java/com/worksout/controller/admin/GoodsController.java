@@ -55,7 +55,10 @@ public class GoodsController {
     }
 
     @GetMapping("/{goodsNo}")
-    public String goodsDetailPage (@PathVariable("goodsNo") String goodsNo, Model model) {
+    public String goodsDetailPage (@PathVariable("goodsNo") String goodsNo, Model model, HttpServletRequest req) {
+        String prev = req.getHeader("Referer");
+        System.out.println(prev);
+
         model.addAttribute("seasons", seasonService.getSeasons());
         model.addAttribute("categories", goodsService.getCategoryList());
         model.addAttribute("sizeGroup", goodsService.getSizeGroup());
@@ -64,10 +67,8 @@ public class GoodsController {
     }
 
     @PostMapping("/update")
-    public void updateGoods (Goods goods, RedirectAttributes rttr, HttpServletRequest req) {
+    public String updateGoods (Goods goods, RedirectAttributes rttr) {
         try {
-            String prev = req.getHeader("Referer");
-            System.out.println(prev);
             System.out.println(goods);
             goodsService.updateGoods(goods);
             rttr.addFlashAttribute("updateResult", "Update Success!");
@@ -75,8 +76,7 @@ public class GoodsController {
             e.printStackTrace();
             rttr.addFlashAttribute("updateResult", "Update Fail...");
         }
-
-//        return "redirect:/admin/goods/list";
+        return "redirect:/admin/goods/list";
     }
 
 }

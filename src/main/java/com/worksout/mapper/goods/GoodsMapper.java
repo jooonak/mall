@@ -35,8 +35,7 @@ public interface GoodsMapper {
 
     Goods getGoods(String goodsNo);
 
-	void updateGoods(Goods goods);
+	int updateGoods(Goods goods);
 
-    @Update("")
-    void updateGoodsDetail(Goods goods);
+    int updateGoodsDetail(Goods goods);
 }

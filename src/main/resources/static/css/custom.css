@@ -1,0 +1,12 @@
+.presentation-title {
+    font-weight: 700;
+    margin: 0;
+    color: #FFFFFF;
+    background: #fbf8ec;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn.btn-icon.btn-lg i.fab {
+    font-size: 1rem;
+}

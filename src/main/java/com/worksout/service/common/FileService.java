@@ -4,12 +4,14 @@ import com.worksout.common.FTPWorker;
 import com.worksout.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @Service
+@PropertySource("classpath:/config/files.properties")
 public class FileService {
 
 	@Value("${ftp.image.path}")

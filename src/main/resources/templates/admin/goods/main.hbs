@@ -51,6 +51,7 @@
 											</div>
 										</th>
                                         <th>이미지</th>
+										<th>상품번호</th>
                                         <th>카테고리</th>
                                         <th>상품명</th>
                                         <th>대표색상</th>
@@ -58,16 +59,17 @@
                                     </thead>
                                     <tbody>
                                     {{#goodsList}}
-                                        <tr class="text-center">
+                                        <tr class="text-center goods-row" data-goods-no="{{goodsNo}}">
 											<td width="5%">
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="{{goodsNo}}">
 													<label class="custom-control-label" for="{{goodsNo}}">노출</label>
 												</div>
 											</td>
-                                            <td width="15%"><img width="70px" src="http://img.worksout.co.kr/shop/img{{mainImg}}" onerror="this.src='/img/no-image.png'"></td>
-                                            <td width="10%">{{categoryNm}}</td>
-                                            <td width="20%"><a href="/admin/goods/{{goodsNo}}">{{goodsNm}}</a></td>
+                                            <td width="15%"><img width="70px" src="http://img.worksout.co.kr{{mainImg}}" onerror="this.src='/img/no-image.png'"></td>
+                                            <td>{{goodsNo}}</td>
+											<td width="10%">{{categoryNm}}</td>
+                                            <td width="20%">{{goodsNm}}</td>
                                             <td width="15%">{{repColor}}</td>
                                             <td width="15%">{{season}}</td>
                                         </tr>
@@ -88,24 +90,30 @@
         <script src="/vendor/datatables/jquery.dataTables.js" ></script>
         <script src="/vendor/datatables/dataTables.bootstrap4.js" ></script>
 		<script src="/js/common/filePopup.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            $(function () {
-               $('.table').DataTable({
-				   'columnDefs': [{
-				       'targets': [0, 1],
-					   'orderable': false
-				   }]
-			   });
-               $($('th')[0]).removeClass('sorting_asc');
+		<script type="text/javascript">
+			$(function () {
+				$('.table').DataTable({
+					'columnDefs': [{
+						'targets': [0, 1],
+						'orderable': false
+					}]
+				});
 
-               $('#selectAll').click(function (e) {
-                   if ( $(this).is(':checked') ) {
-                       $('input[type="checkbox"]').prop('checked', true);
-				   } else {
-					   $('input[type="checkbox"]').prop('checked', false);
-				   }
-			   });
-            });
-        </script>
+				$($('th')[0]).removeClass('sorting_asc');
+
+				$('#selectAll').click(function (e) {
+					if ( $(this).is(':checked') ) {
+						$('input[type="checkbox"]').prop('checked', true);
+					} else {
+						$('input[type="checkbox"]').prop('checked', false);
+					}
+				});
+
+				$('.goods-row td:not(:first-child)').click(function (e) {
+					var goodsNo = $(this).parent().data('goods-no');
+					window.location = `/admin/goods/${goodsNo}`
+				});
+			});
+		</script>
     </body>
 </html>

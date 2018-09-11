@@ -3,16 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.worksout.mapper.goods.GoodsMapper">
+<mapper namespace="com.ourlayer.mapper.goods.GoodsMapper">
 
     <!-- ADMIN QUERY -->
     <select id="getGoodsList" resultType="goods">
         SELECT /* getGoodsList */
-               MAIN_IMG
+               (SELECT
+                       IFNULL(MAIN_IMG,
+                             (SELECT FILE_PATH FROM GOODS_IMG WHERE GOODS_NO = info.GOODS_NO AND ORD = 0 LIMIT 1)
+                             ) AS MAIN_IMG
+                  FROM GOODS_INFO
+                 WHERE GOODS_NO = info.GOODS_NO) AS MAIN_IMG
                , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
                , GOODS_NO
                , GOODS_NM
                , SEASON
+               , DISPLAY_YN
           FROM
                GOODS_INFO info
       ORDER BY REG_DT DESC

@@ -346,17 +346,7 @@
 
                     dropzone.on('success', function (filename, response) {
                         console.log(filename);
-						console.log(response.filePath);
-
-						if ( response.filePath ) uploadFilename.push(response.filePath);
-
-						var parentWindow = window.opener;
-						if ( parentWindow.location.pathname === '/admin/goods/'
-								|| parentWindow.location.pathname === '/admin/goods/list' ) {
-							// parentWindow.location.reload();
-							// window.close();
-						} else {
-						}
+						console.log(response);
 					});
 
 				}

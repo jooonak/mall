@@ -19,9 +19,10 @@
             .dropzone {
                 border: 2px dashed #0087F7;
                 border-radius: 5px;
-                min-height: 150px;
+                min-height: 254px;
                 background: white;
                 padding: 10%;
+				height: auto;
             }
 
             .dropzone.dz-clickable {
@@ -286,8 +287,6 @@
                 pointer-events: none;
                 z-index: 1000;
                 position: absolute;
-                display: block;
-                display: none;
                 opacity: 0;
                 -webkit-transition: opacity 0.3s ease;
                 -moz-transition: opacity 0.3s ease;
@@ -323,20 +322,34 @@
         </style>
     </head>
     <body>
-        <form method="post" enctype="multipart/form-data"
-              class="dropzone needsclick dz-clickable" id="image-upload">
+        <form enctype="multipart/form-data" id="image-upload"
+              class="dropzone needsclick dz-clickable">
             <div class="dz-message needclick">
-                <h4>Drop files here or click to upload image.</h4><br/>
+                <h4>Drop files here or click to upload image.</h4>
             </div>
             <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
         </form>
         <script src="/vendor/dropzone/dropzone.js" type="text/javascript"></script>
         <script type="text/javascript">
             Dropzone.options.imageUpload = {
-                url: '',
+                url: '/files/{{workType}}-image',
                 method: 'post',
                 acceptedFiles: 'image/jpeg',
-                paramName: 'file'
+                paramName: 'file',
+				enqueueForUpload: true,
+				init: function () {
+                    var dropzone = this;
+                    var uploadFilename = [];
+
+                    dropzone.options.addRemoveLinks = true;
+                    dropzone.options.dictRemoveFile = 'remove';
+
+                    dropzone.on('success', function (filename, response) {
+                        console.log(filename);
+						console.log(response);
+					});
+
+				}
             }
         </script>
     </body>

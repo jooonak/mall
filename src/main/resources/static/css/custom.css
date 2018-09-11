@@ -1,0 +1,16 @@
+.btn.btn-icon.btn-lg i.fab {
+    font-size: 1rem;
+}
+
+.navbar .navbar-nav .nav-link:not(.btn) i.fa {
+    font-size: 16px;
+}
+
+@media screen and (max-width: 991px) {
+    .dropdown-item {
+        color: #888;
+    }
+    .navbar .nav-item a:not(.btn):not(.dropdown-item) {
+        color: #888
+    }
+}

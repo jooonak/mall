@@ -3,17 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.worksout.mapper.goods.GoodsMapper">
+<mapper namespace="com.ourlayer.mapper.goods.GoodsMapper">
 
     <!-- ADMIN QUERY -->
     <select id="getGoodsList" resultType="goods">
         SELECT /* getGoodsList */
-               MAIN_IMG
+               (SELECT
+                       IFNULL(MAIN_IMG,
+                             (SELECT FILE_PATH FROM GOODS_IMG WHERE GOODS_NO = info.GOODS_NO AND ORD = 0 LIMIT 1)
+                             ) AS MAIN_IMG
+                  FROM GOODS_INFO
+                 WHERE GOODS_NO = info.GOODS_NO) AS MAIN_IMG
                , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
                , GOODS_NO
                , GOODS_NM
                , SEASON
-               , REP_COLOR
+               , DISPLAY_YN
           FROM
                GOODS_INFO info
       ORDER BY REG_DT DESC
@@ -27,7 +32,6 @@
                , GOODS_NO
                , GOODS_NM
                , SEASON
-               , REP_COLOR
           FROM
                GOODS_INFO info
           <include refid="goodsFilter" />
@@ -52,7 +56,6 @@
                     , SEASON
                     , GOODS_NO
                     , GOODS_NM
-                    , REP_COLOR
                     , SIZE_GROUP_NO
                     , GOODS_DESC
                     , REGR
@@ -64,7 +67,6 @@
                     , #{season}
                     , #{goodsNo}
                     , #{goodsNm}
-                    , #{repColor}
                     , #{sizeGroupNo}
                     , #{goodsDesc}
                     , #{regr}
@@ -103,17 +105,32 @@
                     </foreach>
     </insert>
 
-    <select id="getGoods" resultType="goods">
-        SELECT /* getGoods */
+    <resultMap id="goodsDetail" type="goods">
+        <id column="GOODS_NO" property="goodsNo" />
+        <result column="GOODS_NM" property="goodsNm" />
+        <result column="CATEGORY_NM" property="categoryNm" />
+        <result column="SIZE_GROUP_NM" property="sizeGroupNm" />
+        <result column="SIZE_GROUP_No" property="sizeGroupNo" />
+        <result column="SEASON" property="season" />
+        <result column="SUPPLY_PRICE" property="detail.supplyPrice" />
+        <result column="RETAIL_PRICE" property="detail.retailPrice" />
+        <result column="GOODS_DESC" property="goodsDesc" />
+        <collection property="colors" ofType="String">
+            <result column="COLOR" property="colors" />
+        </collection>
+    </resultMap>
+    <select id="getGoods" resultMap="goodsDetail">
+        SELECT DISTINCT /* getGoods */
                info.GOODS_NO
                , GOODS_NM
-               , CATEGORY_NO
+               , (SELECT CATEGORY_NM FROM GOODS_CATEGORY WHERE CATEGORY_NO = info.CATEGORY_NO) AS CATEGORY_NM
+               , (SELECT DISTINCT GROUP_NM FROM GOODS_SIZE_GROUP WHERE GROUP_NO = info.SIZE_GROUP_NO) AS SIZE_GROUP_NM
+               , SIZE_GROUP_NO
                , SEASON
-               , GOODS_DESC
                , COLOR
-               , STOCK
                , SUPPLY_PRICE
-               , ACTUAL_PRICE
+               , RETAIL_PRICE
+               , GOODS_DESC
           FROM
                GOODS_INFO info
           JOIN
@@ -122,15 +139,38 @@
                info.GOODS_NO = detail.GOODS_NO
          WHERE
                info.GOODS_NO = #{_parameter}
+      ORDER BY COLOR_ORD
     </select>
 
+    <update id="updateGoods">
+        UPDATE GOODS_INFO
+           SET
+               SEASON = #{season}
+               , CATEGORY_NO = #{categoryNo}
+               <if test="sizeGroupNo != null">
+               , SIZE_GROUP_NO = #{sizeGroupNo}
+               </if>
+               , UPDR = #{updr}
+               , UPD_DT = NOW()
+         WHERE GOODS_NO = #{goodsNo}
+    </update>
+
+    <update id="updateGoodsDetail">
+        UPDATE GOODS_DETAIL
+           SET
+               SUPPLY_PRICE = #{detail.supplyPrice}
+               , RETAIL_PRICE = #{detail.retailPrice}
+               , UPDR = #{updr}
+               , UPD_DT = NOW()
+         WHERE GOODS_NO = #{goodsNo}
+    </update>
+
     <!-- SHOP QUERY -->
-    <resultMap id="goodsListShop" type="Goods">
+    <resultMap id="goodsListShop" type="goods">
         <id column="GOODS_NO" property="goodsNo" />
         <result column="GOODS_NM" property="goodsNm" />
         <result column="CATEGORY_NO" property="categoryNo" />
         <result column="SEASON" property="season" />
-        <result column="REP_COLOR" property="repColor" />
         <result column="RETAIL_PRICE" property="retailPrice" />
         <result column="REP_IMG" property="repImg" />
         <collection property="colors" ofType="String">
@@ -146,7 +186,6 @@
 	           , SEASON
 	           , GOODS_NO
 	           , GOODS_NM
-	           , REP_COLOR
 	           , COLOR
 	           , RETAIL_PRICE
 	           , COLOR_ORD

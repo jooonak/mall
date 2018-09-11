@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.worksout.mapper.member.MemberMapper">
+<mapper namespace="com.ourlayer.mapper.member.MemberMapper">
 
     <resultMap id="findMember" type="Member">
         <id column="USERNAME" property="username" />

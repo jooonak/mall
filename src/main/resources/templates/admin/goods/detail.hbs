@@ -10,73 +10,87 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>상품등록</h4><hr/>
+                            <h4>상품상세</h4>
+							<button class="btn btn-danger float-right">미리보기</button>
+							<hr/>
                         </div>
                         <div class="card-body">
-                            <form class="col-md-6 col-sm-12 m-auto" action="/admin/goods/register" method="post">
-                                <div class="form-group">
-                                    <label>상품이름</label>
-                                    <input type="text" class="form-control" name="goodsNm"
-                                           placeholder="Goods Name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="d-block">시즌 :
-                                        <select class="form-control" name="season" required>
-                                            {{#seasons}}
-                                                <option value="{{seasonNm}}">{{seasonNm}}</option>
-                                            {{/seasons}}
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="d-block">카테고리 :
-                                        <select class="form-control" name="categoryNo" required>
-                                            {{#categories}}
-                                                <option value="{{categoryNo}}">{{categoryNm}}</option>
-                                            {{/categories}}
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="d-block">사이즈 그룹 :
-                                        <select class="form-control" name="sizeGroupNo" required>
-                                            {{#sizeGroup}}
-                                                <option value="{{groupNo}}">{{groupNm}}</option>
-                                            {{/sizeGroup}}
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>상품 색상</label>
-                                    <input type="text" class="form-control" name="detail.color"
-                                           placeholder="ex) White, Black, ..." required>
-                                    <span class="badge badge-pill badge-danger">색상간 쉼표 구분, 입력한 순서가 진열 순서로 결정됩니다.</span>
-                                </div>
-                                <div class="form-group">
-                                    <label class="d-block">대표색상 :
-                                        <select class="form-control" name="repColor" required>
-                                            <option value>색상 먼저 입력해주세요</option>
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>공급가</label>
-                                    <input type="text" class="form-control" name="detail.supplyPrice"
-                                           placeholder="supply price" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>판매가</label>
-                                    <input type="text" class="form-control" name="detail.retailPrice"
-                                           placeholder="retail price" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="summernote">상품설명</label>
-                                    <textarea id="summernote" name="goodsDesc"></textarea>
-                                </div>
-                                <input type="hidden" name="regr" value="{{username}}">
-                                <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}" />
-                                <button type="button" class="btn btn-primary btn-round float-left" onclick="imagePop('/img-upload?workType=main')">메인 이미지 등록</button>
-                                <button type="submit" class="btn btn-success btn-round float-right">저장</button>
+                            <form class="col-md-6 col-sm-12 m-auto" action="/admin/goods/update" method="post">
+								<input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}" />
+								<input type="hidden" name="updr" value="{{username}}">
+								{{#goods}}
+									<div class="form-group">
+										<label>상품 상세 설정</label>
+										<span class="badge badge-pill badge-danger">색상 클릭시 수정할 수 있으나 수정시 기존 데이터를 잃을 수 있습니다.</span>
+										<div class="colors">
+											{{#colors}}
+												<button type="button" class="btn btn-warning btn-round"> {{this}} </button>
+											{{/colors}}
+										</div>
+									</div>
+									<input type="hidden" name="goodsNo" value="{{goodsNo}}">
+									<input type="hidden" name="originSizeGroupNo" value="{{sizeGroupNo}}">
+									<div class="form-group">
+										<label>상품이름</label>
+										<input type="text" class="form-control" name="goodsNm"
+											   placeholder="Goods Name" value="{{goodsNm}}" required>
+									</div>
+									<div class="form-group">
+										<label class="d-block">시즌 :
+											<select class="form-control" name="season" required>
+												{{#seasons}}
+													{{#eq season seasonNm}}
+														<option value="{{seasonNm}}" selected>{{seasonNm}}</option>
+													{{^}}
+														<option value="{{seasonNm}}">{{seasonNm}}</option>
+													{{/eq}}
+												{{/seasons}}
+											</select>
+										</label>
+									</div>
+									<div class="form-group">
+										<label class="d-block">카테고리 :
+											<select class="form-control" name="categoryNo" required>
+												{{#categories}}
+													{{#eq goods.categoryNm this.categoryNm}}
+														<option value="{{categoryNo}}" selected>{{categoryNm}}</option>
+													{{^}}
+														<option value="{{categoryNo}}">{{categoryNm}}</option>
+													{{/eq}}
+												{{/categories}}
+											</select>
+										</label>
+									</div>
+									<div class="form-group">
+										<label class="d-block">사이즈 그룹 :
+											<select class="form-control" name="sizeGroupNo" required>
+												{{#sizeGroup}}
+													{{#eq sizeGroupNm groupNm}}
+														<option value="{{groupNo}}" selected>{{groupNm}}</option>
+													{{^}}
+														<option value="{{groupNo}}">{{groupNm}}</option>
+													{{/eq}}
+												{{/sizeGroup}}
+											</select>
+										</label>
+									</div>
+									<div class="form-group">
+										<label>공급가</label>
+										<input type="text" class="form-control" name="detail.supplyPrice"
+											   placeholder="supply price" value="{{detail.supplyPrice}}" required>
+									</div>
+									<div class="form-group">
+										<label>판매가</label>
+										<input type="text" class="form-control" name="detail.retailPrice"
+											   placeholder="retail price" value="{{detail.retailPrice}}" required>
+									</div>
+									<div class="form-group">
+										<label for="summernote">상품설명</label>
+										<textarea id="summernote" name="goodsDesc"></textarea>
+									</div>
+									<button type="button" class="btn btn-primary btn-round float-left" onclick="centeredPop('/view-images/{{goodsNo}}')">메인 이미지 선택</button>
+									<button type="submit" class="btn btn-success btn-round float-right">저장</button>
+								{{/goods}}
                             </form>
                         </div>
                     </div>
@@ -93,22 +107,8 @@
         <script type="text/javascript">
             $(function () {
                 var $summernote = $('#summernote');
-                var $color = $('input[name="detail.color"]');
-                var colorArr = [];
-                $color.blur(function () {
-                    var colors = $color.val().split(",");
-                    var optionStr = '';
-
-                    colors.forEach(function (str) {
-                        var color = str.trim().toUpperCase();
-                        colorArr.push(color);
-                        optionStr += `<option value='${color}'>${color}</option>`;
-                    });
-                    $('select[name="repColor"]').html(optionStr);
-                });
-
+                $summernote.summernote('code', '{{{goods.goodsDesc}}}');
                 $summernote.summernote({
-                    placeholder: '상품 설명을 입력해주세요',
                     disableDragAndDrop: true,
                     tabSize: 2,
                     minHeight: 150

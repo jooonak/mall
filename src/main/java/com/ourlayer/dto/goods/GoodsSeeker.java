@@ -10,7 +10,6 @@ public class GoodsSeeker {
     private String searchGb;
     private String searchTxt;
     private String color;
-    private String repColor;
     private String size;
     private Integer minPrice;
     private Integer maxPrice;

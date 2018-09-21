@@ -36,9 +36,54 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title text-center"><a href="list"> Goods List </a></h4>
-							<h6><button class="btn btn-warning float-left" onclick="centeredHalfPop('/img-upload?workType=goods')"> 상품 이미지 등록 </button></h6>
-							<h6><a href="register"><button class="btn btn-primary float-right"> 상품등록 </button></a></h6>
+							<div class="card-header">
+								<h4 class="card-title text-center"> Goods List </h4>
+								<a href="/admin/goods/register"><button class="btn btn-round btn-warning float-right">상품 등록</button></a>
+								<form>
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<label class="input-group-text" for="seasonNm"> SEASON </label>
+										</div>
+										<select class="custom-select" name="seasonNm" id="seasonNm">
+											<option value>시즌</option>
+											{{#seasons}}
+												{{#eq seeker.seasonNm seasonNm}}
+													<option value="{{seasonNm}}" selected>{{seasonNm}}</option>
+												{{^}}
+													<option value="{{seasonNm}}">{{seasonNm}}</option>
+												{{/eq}}
+											{{/seasons}}
+										</select>
+									</div>
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<label class="input-group-text" for="category"> CATEGORY </label>
+										</div>
+										<select class="custom-select" name="categoryNo" id="category">
+											<option value>카테고리</option>
+											{{#categories}}
+												{{#eq seeker.categoryNo categoryNo}}
+													<option value="{{categoryNo}}" selected>{{categoryNm}}</option>
+												{{^}}
+													<option value="{{categoryNo}}">{{categoryNm}}</option>
+												{{/eq}}
+											{{/categories}}
+										</select>
+									</div>
+									<div class="input-group mb-3">
+										<label class="input-group-prepend">
+											<select class="input-group-text" name="searchGb" style="font-size: inherit;">
+												<option value>검색 구분</option>
+												<option value="GOODS_NM">상품 이름</option>
+												<option value="GOODS_NO">상품 번호</option>
+											</select>
+										</label>
+										<input id="sch" class="form-control" type="text" name="searchTxt">
+									</div>
+									<button type="button" class="btn btn-warning float-left" onclick="centeredHalfPop('/img-upload?workType=goods')"> 상품 이미지 등록 </button>
+									<button type="submit" class="btn btn-info float-right"><i class="nc-icon nc-zoom-split"></i> 검색 </button>
+								</form>
+							</div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -54,7 +99,6 @@
 										<th>상품번호</th>
                                         <th>카테고리</th>
                                         <th>상품명</th>
-                                        <th>대표색상</th>
                                         <th>시즌</th>
                                     </thead>
                                     <tbody>
@@ -70,7 +114,6 @@
                                             <td>{{goodsNo}}</td>
 											<td width="10%">{{categoryNm}}</td>
                                             <td width="20%">{{goodsNm}}</td>
-                                            <td width="15%">{{repColor}}</td>
                                             <td width="15%">{{season}}</td>
                                         </tr>
                                     {{/goodsList}}
@@ -80,6 +123,26 @@
                         </div>
                     </div>
                 </div>
+				<div class="col-md-6 col-sm-12">
+					<div class="w-100 card card-nav-tabs text-center" style="width: 20rem;">
+						<div class="card-body">
+							<h5 class="card-title"> Goods register </h5>
+							<h6 class="card-subtitle mb-2 text-muted"> 상품 진열 순서를 수정할 수 있습니다. </h6>
+							<p class="card-text"> </p>
+							<h6><a href="register"><button class="btn btn-primary"> 상품등록 </button></a></h6>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="w-100 card card-nav-tabs text-center" style="width: 20rem;">
+						<div class="card-body">
+							<h5 class="card-title"> Goods Size </h5>
+							<h6 class="card-subtitle mb-2 text-muted"> 상품 사이즈 그룹을 관리할 수 있습니다. </h6>
+							<p class="card-text"> </p>
+							<h6><a href="register"><button class="btn btn-primary"> 상품등록 </button></a></h6>
+						</div>
+					</div>
+				</div>
             </div>
         </div>
         {{> admin/include/footer}}

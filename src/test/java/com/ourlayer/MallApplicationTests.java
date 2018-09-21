@@ -26,13 +26,9 @@ public class MallApplicationTests {
 	private String imgPath;
 
 	@Autowired
-	FTPClient ftpClient;
-
-	@Autowired
 	private FTPWorker ftpWorker;
 
 	public void FTPTest () throws IOException{
-
 		ftpWorker.sendFile(imgPath, "testFile.jpg", new FileInputStream("C:\\Users\\Administrator\\Desktop\\image\\000001-gray.jpg"));
 	}
 }

@@ -21,7 +21,7 @@ public interface GoodsMapper {
     @Select("SELECT /* getCategoryList */ SUP_CATEGORY_NO, CATEGORY_NO, CATEGORY_NM FROM GOODS_CATEGORY ORDER BY SUP_CATEGORY_NO ASC, CATEGORY_ORD ASC")
     List<GoodsCategory> getCategoryList();
 
-    @Select("SELECT /* getSizeGroup */ DISTINCT GROUP_NO, GROUP_NM FROM GOODS_SIZE_GROUP ORDER BY DISPLAY_ORD ASC")
+    @Select("SELECT /* getSizeGroup */ DISTINCT GROUP_NO, GROUP_NM, DISPLAY_ORD FROM GOODS_SIZE_GROUP ORDER BY DISPLAY_ORD ASC")
     List<GoodsSizeGroup> getSizeGroup();
 
     @Select("SELECT /* getSizeDetail */ SIZE FROM GOODS_SIZE_GROUP WHERE GROUP_NO = #{sizeGroupNo} ORDER BY SIZE_ORD")

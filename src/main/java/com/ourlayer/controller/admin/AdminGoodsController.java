@@ -24,8 +24,10 @@ public class AdminGoodsController {
     private SeasonService seasonService;
 
     @GetMapping("/")
-    public String index (Model model) {
-        model.addAttribute("goodsList", goodsService.getGoodsList());
+    public String index (Model model, @ModelAttribute("seeker") GoodsSeeker seeker) {
+        model.addAttribute("goodsList", goodsService.getGoodsList(seeker));
+        model.addAttribute("seasons", seasonService.getSeasons());
+        model.addAttribute("categories", goodsService.getCategoryList());
         return "/admin/goods/main";
     }
 
@@ -37,7 +39,7 @@ public class AdminGoodsController {
     }
 
     @GetMapping("/register")
-    public void goodsRegistrationPage (Model model, Authentication auth) {
+    public void goodsRegistrationPage (Model model) {
         model.addAttribute("seasons", seasonService.getSeasons());
         model.addAttribute("categories", goodsService.getCategoryList());
         model.addAttribute("sizeGroup", goodsService.getSizeGroup());

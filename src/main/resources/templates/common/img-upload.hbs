@@ -339,11 +339,8 @@
 				enqueueForUpload: true,
 				init: function () {
                     var dropzone = this;
-                    var uploadFilename = [];
-
                     dropzone.options.addRemoveLinks = true;
                     dropzone.options.dictRemoveFile = 'remove';
-
                     dropzone.on('success', function (filename, response) {
                         console.log(filename);
 						console.log(response);

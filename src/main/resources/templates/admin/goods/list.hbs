@@ -1,98 +1,101 @@
-{{> admin/include/header}}
-        <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-center"> Goods List </h4>
-                            <a href="/admin/goods/register"><button class="btn btn-round btn-warning float-right">상품 등록</button></a>
-                            <form>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="seasonNm"> SEASON </label>
-                                    </div>
-                                    <select class="custom-select" name="seasonNm" id="seasonNm">
-                                        <option value>시즌</option>
-                                        {{#seasons}}
-                                            {{#eq seeker.seasonNm seasonNm}}
-                                                <option value="{{seasonNm}}" selected>{{seasonNm}}</option>
-                                            {{^}}
-                                                <option value="{{seasonNm}}">{{seasonNm}}</option>
-                                            {{/eq}}
-                                        {{/seasons}}
-                                    </select>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="category"> CATEGORY </label>
-                                    </div>
-                                    <select class="custom-select" name="categoryNo" id="category">
-                                        <option value>카테고리</option>
-                                        {{#categories}}
-                                            {{#eq seeker.categoryNo categoryNo}}
-                                                <option value="{{categoryNo}}" selected>{{categoryNm}}</option>
-                                            {{^}}
-                                                <option value="{{categoryNo}}">{{categoryNm}}</option>
-                                            {{/eq}}
-                                        {{/categories}}
-                                    </select>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <label class="input-group-prepend">
-                                        <select class="input-group-text" name="searchGb" style="font-size: inherit;">
-                                            <option value>검색 구분</option>
-                                            <option value="GOODS_NM">상품 이름</option>
-                                            <option value="GOODS_NO">상품 번호</option>
-                                        </select>
-                                    </label>
-                                        <input id="sch" class="form-control" type="text" name="searchTxt">
-                                </div>
-                                <button class="btn btn-info float-right"><i class="nc-icon nc-zoom-split"></i> 검색 </button>
-                            </form>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead class="text-primary text-center">
-                                        <th>이미지</th>
-                                        <th>카테고리</th>
-                                        <th>상품명</th>
-                                        <th>대표색상</th>
-                                        <th>시즌</th>
-                                    </thead>
-                                    <tbody>
-                                    {{#goodsList}}
-                                        <tr class="text-center">
-                                            <td width="15%"><img width="70px" src="http://img.worksout.co.kr{{mainImg}}" onerror="this.src='/img/no-image.png'"></td>
-                                            <td width="10%">{{categoryNm}}</td>
-                                            <td width="20%"><a href="/admin/goods/{{goodsNo}}">{{goodsNm}}</a></td>
-                                            <td width="15%">{{repColor}}</td>
-                                            <td width="15%">{{season}}</td>
-                                        </tr>
-                                    {{/goodsList}}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{> admin/include/footer}}
-        <!--  Notifications Plugin    -->
-        <script src="/vendor/bootstrap/js/bootstrap-notify.js"></script>
-        <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-        <script src="/js/paper-dashboard.min.js" type="text/javascript"></script>
-        <script src="/vendor/datatables/jquery.dataTables.js" ></script>
-        <script src="/vendor/datatables/dataTables.bootstrap4.js" ></script>
-        <script type="text/javascript">
-            {{#regResult}}
-                alert('{{regResult}}');
-            {{/regResult}}
-            $(function () {
-               $('.table').DataTable();
-            });
-        </script>
-    </body>
+		{{> admin/include/header}}
+		<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+		<div class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title text-center"> Goods List </h4>
+							<a href="/admin/goods/register">
+								<button class="btn btn-round btn-warning float-right">상품 등록</button>
+							</a>
+							<form>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="seasonNm"> SEASON </label>
+									</div>
+									<select class="custom-select" name="seasonNm" id="seasonNm">
+										<option value>시즌</option>
+										{{#seasons}}
+											{{#eq seeker.seasonNm seasonNm}}
+												<option value="{{seasonNm}}" selected>{{seasonNm}}</option>
+											{{^}}
+												<option value="{{seasonNm}}">{{seasonNm}}</option>
+											{{/eq}}
+										{{/seasons}}
+									</select>
+								</div>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="category"> CATEGORY </label>
+									</div>
+									<select class="custom-select" name="categoryNo" id="category">
+										<option value>카테고리</option>
+										{{#categories}}
+											{{#eq seeker.categoryNo categoryNo}}
+												<option value="{{categoryNo}}" selected>{{categoryNm}}</option>
+											{{^}}
+												<option value="{{categoryNo}}">{{categoryNm}}</option>
+											{{/eq}}
+										{{/categories}}
+									</select>
+								</div>
+								<div class="input-group mb-3">
+									<label class="input-group-prepend">
+										<select class="input-group-text" name="searchGb" style="font-size: inherit;">
+											<option value>검색 구분</option>
+											<option value="GOODS_NM">상품 이름</option>
+											<option value="GOODS_NO">상품 번호</option>
+										</select>
+									</label>
+									<input id="sch" class="form-control" type="text" name="searchTxt">
+								</div>
+								<button class="btn btn-info float-right"><i class="nc-icon nc-zoom-split"></i> 검색</button>
+							</form>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead class="text-primary text-center">
+									<th>이미지</th>
+									<th>카테고리</th>
+									<th>상품명</th>
+									<th>대표색상</th>
+									<th>시즌</th>
+									</thead>
+									<tbody>
+									{{#goodsList}}
+										<tr class="text-center">
+											<td width="15%"><img width="70px" src="http://img.worksout.co.kr{{mainImg}}"
+											                     onerror="this.src='/img/no-image.png'"></td>
+											<td width="10%">{{categoryNm}}</td>
+											<td width="20%"><a href="/admin/goods/{{goodsNo}}">{{goodsNm}}</a></td>
+											<td width="15%">{{repColor}}</td>
+											<td width="15%">{{season}}</td>
+										</tr>
+									{{/goodsList}}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{> admin/include/footer}}
+		<!--  Notifications Plugin    -->
+		<script src="/vendor/bootstrap/js/bootstrap-notify.js"></script>
+		<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+		<script src="/js/paper-dashboard.min.js" type="text/javascript"></script>
+		<script src="/vendor/datatables/jquery.dataTables.js"></script>
+		<script src="/vendor/datatables/dataTables.bootstrap4.js"></script>
+		<script type="text/javascript">
+				{{#regResult}}
+				alert('{{regResult}}');
+				{{/regResult}}
+			$(function () {
+				$('.table').DataTable();
+			});
+		</script>
+	</body>
 </html>

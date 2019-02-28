@@ -11,7 +11,7 @@ import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
 
 @Configuration
-@PropertySource(" :/config/files.properties")
+@PropertySource("classpath:/config/files.properties")
 public class FTPConfig {
 
 	@Value("${ftp.host}")
